@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8' />
+		<title>DOM EXAMPLE</title>
+    <script>
+      function hide(e) {
+        e.innerHTML = "X";
+      }
+
+      function show(...e) {
+        e.forEach(e => {
+         e.innerHTML = e.id;
+        });
+      }
+
+      var buttons = [];
+      function toggle(e) {
+        hide(e);
+        switch(e.id) {
+          case 'A':
+            show(buttons[1], buttons[0]);
+            break;
+          case 'B':
+            show(buttons[2], buttons[0]);
+            break;
+          case 'C':
+            show(buttons[2], buttons[1]);
+            break;
+        };
+      }
+
+      function newButton(id) {
+        let b = document.createElement("BUTTON");
+        b.id = id;
+        b.onclick = new Function("toggle(this);");
+        b.appendChild(document.createTextNode(id));
+        return b;
+      }
+
+      window.onload = () => {
+        let button_bar = document.getElementById("action_buttons");
+        ['A', 'B', 'C'].forEach(n => {
+          buttons.unshift(newButton(n));
+          button_bar.appendChild(buttons[0]);
+        });
+      };
+    </script>
+	</head>
+
+	<body>
+		<h1>DOM EXAMPLE</h1>
+
+    <h2>Known Actions</h2>
+    <div id="action_buttons"></div>
+	</body>
+</html>

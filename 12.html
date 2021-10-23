@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8' />
+		<title>TIMER EXAMPLE</title>
+    <script>
+      function print(e, m) {
+	      document.getElementById(e).innerHTML += `<div>${m}</div>`;
+      }
+
+      const doAfter = (i, f) => { return window.setTimeout(f, i) };
+      const doEvery = (i, f) => { return window.setInterval(f, i) };
+
+      window.onload = () => {
+        let i = doEvery(500, () => {
+          print("event_log", "doEvery triggered");
+        });
+        doAfter(3000, () => {
+          print("event_log", "doAfter triggered");
+          doAfter(2000, () => {
+            window.clearInterval(i);
+            print("event_log", "doEvery cancelled");
+          });
+        });
+      }
+    </script>
+	</head>
+
+	<body>
+		<h1>TIMER EXAMPLE</h1>
+
+    <h2>Timer Events</h2>
+    <div id='event_log'></div>
+  </body>
+</html>

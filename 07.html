@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8' />
+		<title>FETCH EXAMPLE</title>
+    <script>
+      function print(e, m) {
+	      document.getElementById(e).innerHTML += `<div>${m}</div>`;
+      }
+
+      {{range $c, $v := .Commands}}
+      	async function {{$c}}() {
+          fetch("{{$c}}")
+            .then(response => response.text())
+            .then(text => print("event_log", text))
+            .catch(e => print("event_log", `Request Failed: ${e}`));
+      	}
+      {{end}}
+    </script>
+	</head>
+
+	<body>
+		<h1>FETCH EXAMPLE</h1>
+
+    <h2>Known Asynchronous Actions</h2>
+    <div>
+      {{range $c, $v := .Commands}}
+        <span>
+          <button type="button" onclick="{{$c}}();">{{$c}}</button>
+        </span>
+      {{end}}
+    </div>
+
+    <h2>Server Output</h2>
+    <div id='event_log'></div>
+	</body>
+</html>

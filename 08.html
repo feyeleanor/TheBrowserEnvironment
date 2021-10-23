@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8' />
+		<title>DOM EXAMPLE</title>
+    <script>
+      function print(e, m) {
+	      document.getElementById(e).innerHTML += `<div>${m}</div>`;
+      }
+
+      function hide(...n) {
+        n.forEach(e => {
+          document.getElementById(e).innerHTML = "X";
+        });
+      }
+
+      function show(...n) {
+        n.forEach(e => {
+          document.getElementById(e).innerHTML = e;
+        });
+      }
+
+      function toggle(name) {
+        print("event_log", name);
+        hide(name);
+        switch(name) {
+          case 'A':
+            show('B', 'C');
+            break;
+          case 'B':
+            show('A', 'C');
+            break;
+          case 'C':
+            show('A', 'B');
+            break;
+        };
+      }
+    </script>
+	</head>
+
+	<body>
+		<h1>DOM EXAMPLE</h1>
+
+    <h2>Known Actions</h2>
+    <div>
+        <button id='A' type="button" onclick="toggle('A');">A</button>
+        <button id='B' type="button" onclick="toggle('B');">B</button>
+        <button id='C' type="button" onclick="toggle('C');">C</button>
+    </div>
+
+    <h2>Server Output</h2>
+    <div id='event_log'></div>
+	</body>
+</html>

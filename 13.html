@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8' />
+		<title>TIMER FETCH EXAMPLE</title>
+    <script>
+      const print = (e, m) => document.getElementById(e).innerHTML += `<div>${m}</div>`;
+      const doEvery = (i, f) => { return window.setInterval(f, i) };
+      var timers = {}
+
+      function doCommand(c) {
+        if (timers[c]) {
+          print("event_log", `no longer polling ${c}`);
+          window.clearInterval(timers[c]);
+          timers[c] = null;
+        } else {
+          print("event_log", `polling ${c}`);
+          timers[c] = doEvery(500, () => {
+            fetch(c)
+              .then(response => response.text())
+              .then(text => print("event_log", text))
+              .catch(e => print("event_log", `Request Failed: ${e}`));          
+          });
+        }
+      }
+
+      function newButton(n, c) {
+        let b = document.createElement("BUTTON");
+        b.onclick = c;
+        b.appendChild(document.createTextNode(n));
+        return b;
+      }
+
+      window.onload = () => {
+        let button_bar = document.getElementById("action_buttons");
+        {{range $c, $v := .Commands}}
+          button_bar.appendChild(
+            newButton('{{$c}}', () => doCommand('{{$c}}')));
+        {{end}}
+      }
+    </script>
+	</head>
+
+	<body>
+		<h1>TIMER FETCH EXAMPLE</h1>
+
+    <h2>Known Asynchronous Actions</h2>
+    <div id="action_buttons"></div>
+
+    <h2>Server Output</h2>
+    <div id='event_log'></div>
+  </body>
+</html>
