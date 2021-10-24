@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8' />
+		<title>WebSocket EXAMPLE</title>
+    <script>
+      function print(m) {
+        document.getElementById("event_log").innerHTML += `<div>${m}</div>`;
+      }
+
+      function newButton(n, c) {
+        let b = document.createElement("BUTTON");
+        b.onclick = c;
+        b.appendChild(document.createTextNode(n));
+        return b;
+      }
+
+      window.onload = () => {
+        var socket = new WebSocket(`ws://${location.host}{{.URL}}`);
+        socket.onopen = (e) => print("opening socket: {{.URL}}");
+      	socket.onclose = (e) => print("closing socket: {{.URL}}");
+      	socket.onerror = (e) => print(e.message);
+        socket.onmessage = (m) => print(JSON.parse(m.data));
+
+        let button_bar = document.getElementById("action_buttons");
+        {{range $c, $v := .Commands}}
+          button_bar.appendChild(
+            newButton('{{$v}}', () => socket.send(
+              JSON.stringify({ Message: '{{$v}}' }))));
+        {{end}}
+      }
+    </script>
+	</head>
+
+	<body>
+		<h1>WebSocket EXAMPLE</h1>
+
+    <h2>Known Asynchronous Actions</h2>
+    <div id="action_buttons"></div>
+
+    <h2>Server Output</h2>
+    <div id='event_log'></div>
+  </body>
+</html>
